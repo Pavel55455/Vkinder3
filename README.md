@@ -1,22 +1,19 @@
-Входные данные
+VKinder diploma of Netology
+Dating bot analogue of Tinder
+To run the bot you need a user token and your community token.
+You must add these tokens to the environment variables:
 
-Имя пользователя или его id в ВК, для которого мы ищем пару.
-если информации недостаточно нужно дополнительно спросить её у пользователя.
+export COMMUNITY_TOKEN=vk1.aXyZy...
 
-Требования к сервису:
+export USER_TOKEN=vk1.aXyZy...
 
-Код программы удовлетворяет PEP8.
-Получать токен от пользователя с нужными правами.
-Программа декомпозирована на функции/классы/модули/пакеты.
-Результат программы записывать в БД.
-Люди не должны повторяться при повторном поиске.
-Не запрещается использовать внешние библиотеки для vk.
-Дополнительные требования (не обязательны для получения диплома):
-
-В vk максимальная выдача при поиске 1000 человек. Подумать как это ограничение можно обойти.
-Добавить возможность ставить/убирать лайк, выбранной фотографии.
-Можно усложнить поиск добавив поиск по интересам. Разбор похожих интересов(группы, книги, музыка, интересы) нужно будет провести с помощью анализа текста.
-У каждого критерия поиска должны быть свои веса. То есть совпадение по возрасту должны быть важнее общих групп. Интересы по музыке важнее книг. Наличие общих друзей важнее возраста. И так далее.
-Добавлять человека в избранный список, используя БД.
-Добавлять человека в черный список чтобы он больше не попадался при поиске, используя БД.
-К списку фотографий из аватарок добавлять список фотографий, где отмечен пользователь.
+Warning
+Make sure that Callback API is enabled in your community settings
+When creating a user token, use this link by changing client_id to the id of your application. This link generates an indefinite token with the required parameters. Not all applications support indefinite tokens, be careful! https://oauth.vk.com/authorize?client_id=1&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=friends,photos,offline&response_type=token&v=5.131&state=123456
+Launch Instructions
+Create an empty directory
+git clone https://github.com/Pavel55455/vkinder.git ./
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+nohup python bot.py &
