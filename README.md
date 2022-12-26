@@ -21,7 +21,7 @@ Launch Instructions
 
 1. Create an empty directory
 2. 
-3. git clone https://github.com/Pavel55455/vkinder.git ./
+3. git clone https://github.com/Pavel55455/vkinder3.git ./
 4. 
 5. python3 - m venv venv
 6.
