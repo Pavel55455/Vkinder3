@@ -1,40 +1,39 @@
+from vkbottle import CtxStorage
+from vkbottle.bot import Message
+from vkbottle.bot import BotLabeler
+from vkbottle import BaseStateGroup
 
->>> from vkbottle import CtxStorage
-... from vkbottle.bot import Message
-... from vkbottle.bot import BotLabeler
-... from vkbottle import BaseStateGroup
-... 
-... from .messages import send_age, send_city, search_options, unfamiliar_city, send_only_numbers, age_limit, searching
-... from .config import api, state_dispenser, AGE_FROM, AGE_TO, USER_DATA_FIELDS
-... from .utils import get_age, reversed_sex_table, sex_table, relation_table
-... from .base import is_there_a_user, add_new_user
-... from .callbacks import start_search_users
-... 
-... 
-... states_labeler = BotLabeler()
-... ctx = CtxStorage()
-... 
-... 
-... class UserInfoState(BaseStateGroup):
-...     USER_DATA = 0
-...     AGE = 1
-...     CITY = 2
-... 
-... 
-... @states_labeler.private_message(state=UserInfoState.AGE)
-... async def age_handler(message: Message):
-...     text = message.text.strip()
-...     if not text.isdigit():
-...         await message.answer(send_only_numbers)
-...     else:
-...         age = int(text)
-...         if AGE_FROM <= age <= AGE_TO:
-...             ctx.set('age', age)
-...         else:
-...             await message.answer(age_limit)
-...     await state_dispenser.delete(message.peer_id)
-...     await data_state_handler(message)
-... 
+from .messages import send_age, send_city, search_options, unfamiliar_city, send_only_numbers, age_limit, searching
+from .config import api, state_dispenser, AGE_FROM, AGE_TO, USER_DATA_FIELDS
+from .utils import get_age, reversed_sex_table, sex_table, relation_table
+from .base import is_there_a_user, add_new_user
+from .callbacks import start_search_users
+
+
+states_labeler = BotLabeler()
+ctx = CtxStorage()
+
+
+class UserInfoState(BaseStateGroup):
+    USER_DATA = 0
+    AGE = 1
+    CITY = 2
+
+
+@states_labeler.private_message(state=UserInfoState.AGE)
+async def age_handler(message: Message):
+    text = message.text.strip()
+    if not text.isdigit():
+        await message.answer(send_only_numbers)
+    else:
+        age = int(text)
+        if AGE_FROM <= age <= AGE_TO:
+            ctx.set('age', age)
+        else:
+            await message.answer(age_limit)
+    await state_dispenser.delete(message.peer_id)
+    await data_state_handler(message)
+
 
 @states_labeler.private_message(state=UserInfoState.CITY)
 async def city_handler(message: Message):
@@ -99,3 +98,4 @@ async def data_state_handler(message: Message):
             return
 
     await message.answer(searching)
+    await start_search_users(message)
