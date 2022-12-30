@@ -1,3 +1,18 @@
+from typing import Union, List
+
+from vkbottle.tools.dev.mini_types.base import BaseMessageMin
+from vkbottle.bot import BotLabeler, MessageEvent, Message
+from vkbottle_types.codegen.objects import UsersUserFull
+from vkbottle import GroupEventType, CtxStorage
+from vkbottle.dispatch.rules import ABCRule
+
+from .config import api, SEARCH_USERS_PARAMS, GET_PHOTOS_PARAMS, SEARCH_USERS_FIELDS, USER_DATA_FIELDS
+from .base import get_user, is_viewed, add_view, add_like
+from .messages import not_found, end_search
+from .keyboards import get_carousel_keyboard
+from .utils import get_age, reversed_sex_table
+from .base import User
+
 
 ctx = CtxStorage()
 callback_labeler = BotLabeler()
@@ -128,40 +143,41 @@ async def open_link(event: MessageEvent):
 async def next_user(event: MessageEvent):
     user = get_user(event.user_id)
     found_users = await search_users(user)
-...     if not found_users:
-...         await event.send_message(end_search)
-...         return
-...     first_user_found = found_users[1]
-...     add_view(event.user_id, first_user_found.id)
-...     if len(found_users) < 2:
-...         await message_processing(first_user_found, message=event, last=True)
-...         ctx.set('users', [])
-...         return
-... 
-...     await message_processing(first_user_found, message=event)
-...     ctx.set('users', found_users[2:])
-... 
-... 
-... @callback_labeler.raw_event(GroupEventType.MESSAGE_EVENT, MessageEvent, PayloadRule({'cmd': 'like'}))
-... async def like_user(event: MessageEvent):
-...     # Processing of the likes, "change the message"
-...     liked_user_id = event.object.payload.get('user_id')
-...     liked_users = await api.users.get(liked_user_id, fields=USER_DATA_FIELDS)
-...     liked_user = liked_users[0]
-...     await message_processing(liked_user, message=event, liked=True)
-...     add_like(event.user_id, liked_user_id)
-... 
-...     # Sending a new message
-...     user = get_user(event.user_id)
-...     found_users = await search_users(user)
-...     if not found_users:
-...         await event.send_message(end_search)
-...         return
-... 
-...     first_user_found = found_users[0]
-...     add_view(event.user_id, first_user_found.id)
-...     if len(found_users) < 2:
-...         await message_processing(liked_user, message=event, change_message=False, last=True)
-...         ctx.set('users', [])
-...         return
-...     await message_processing(liked_user, message=event, change_message=False)
+    if not found_users:
+        await event.send_message(end_search)
+        return
+    first_user_found = found_users[1]
+    add_view(event.user_id, first_user_found.id)
+    if len(found_users) < 2:
+        await message_processing(first_user_found, message=event, last=True)
+        ctx.set('users', [])
+        return
+
+    await message_processing(first_user_found, message=event)
+    ctx.set('users', found_users[2:])
+
+
+@callback_labeler.raw_event(GroupEventType.MESSAGE_EVENT, MessageEvent, PayloadRule({'cmd': 'like'}))
+async def like_user(event: MessageEvent):
+    # Processing of the likes, "change the message"
+    liked_user_id = event.object.payload.get('user_id')
+    liked_users = await api.users.get(liked_user_id, fields=USER_DATA_FIELDS)
+    liked_user = liked_users[0]
+    await message_processing(liked_user, message=event, liked=True)
+    add_like(event.user_id, liked_user_id)
+
+    # Sending a new message
+    user = get_user(event.user_id)
+    found_users = await search_users(user)
+    if not found_users:
+        await event.send_message(end_search)
+        return
+
+    first_user_found = found_users[0]
+    add_view(event.user_id, first_user_found.id)
+    if len(found_users) < 2:
+        await message_processing(liked_user, message=event, change_message=False, last=True)
+        ctx.set('users', [])
+        return
+    await message_processing(liked_user, message=event, change_message=False)
+    ctx.set('users', found_users[1:])
