@@ -1,40 +1,39 @@
+import logging
 
->>> import logging
-... 
-... from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
-... from sqlalchemy.orm import declarative_base, relationship, sessionmaker
-... from sqlalchemy import exc
-... 
-... from .config import DSN
-... 
-... 
-... Base = declarative_base()
-... engine = create_engine(DSN, echo=False)
-... Session = sessionmaker(bind=engine)
-... logger = logging.getLogger('vkinder')
-... 
-... 
-... class User(Base):
-...     __tablename__ = 'user'
-...     id = Column(Integer, primary_key=True)
-...     user_id = Column(Integer, nullable=False)
-...     sex_id = Column(Integer, nullable=False)
-...     age = Column(Integer, nullable=False)
-...     city = Column(String, nullable=False)
-...     relation_id = Column(Integer, nullable=False)
-... 
-...     def __init__(self, user_id: int, sex_id: int, age: int, city: str, relation_id: int):
-...         super().__init__()
-...         self.user_id = user_id
-...         self.sex_id = sex_id
-...         self.age = age
-...         self.city = city
-...         self.relation_id = relation_id
-... 
-...     def __repr__(self):
-...         return f'<{type(self).__name__}(id={self.id})>'
-... 
-... 
+from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
+from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy import exc
+
+from .config import DSN
+
+
+Base = declarative_base()
+engine = create_engine(DSN, echo=False)
+Session = sessionmaker(bind=engine)
+logger = logging.getLogger('vkinder')
+
+
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, nullable=False)
+    sex_id = Column(Integer, nullable=False)
+    age = Column(Integer, nullable=False)
+    city = Column(String, nullable=False)
+    relation_id = Column(Integer, nullable=False)
+
+    def __init__(self, user_id: int, sex_id: int, age: int, city: str, relation_id: int):
+        super().__init__()
+        self.user_id = user_id
+        self.sex_id = sex_id
+        self.age = age
+        self.city = city
+        self.relation_id = relation_id
+
+    def __repr__(self):
+        return f'<{type(self).__name__}(id={self.id})>'
+
+
 class View(Base):
     __tablename__ = 'view'
     id = Column(Integer, primary_key=True)
@@ -146,3 +145,4 @@ def add_like(user_id: int, liked_user_id: int) -> None:
 
 
 def create_tables():
+    Base.metadata.create_all(engine)
