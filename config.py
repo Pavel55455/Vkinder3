@@ -31,42 +31,43 @@ USER_DATA_FIELDS = [
     'sex',
     'city',
     'bdate',
-...     'relation',
-... ]
-... 
-... # Options for finding VK users
-... SEARCH_USERS_PARAMS = {
-...     'offset': 0,
-...     'count': 1000,
-...     'city': None,
-...     'sex': None,
-...     'age_from': None,
-...     'age_to': None,
-...     'has_photo': 1,
-...     'status': None,
-... }
-... 
-... # Fields that must be present when searching for VK users
-... SEARCH_USERS_FIELDS = [
-...     'is_friend',
-...     'is_closed',
-...     'blacklisted',
-...     'blacklisted_by_me',
-...     'can_write_private_message',
-...     'bdate',
-...     'verified',
-... ]
-... 
-... # Parameters for receiving photos of a VK user
-... GET_PHOTOS_PARAMS = {
-...     'count': 3,
-...     'skip_hidden': 1
-... }
-... 
-... # vkbottle API
-... api = API(USER_TOKEN)
-... 
-... # vkbottle Labeler
-... base_labeler = BotLabeler()
-... 
-... # vkbottle StateDispenser
+    'relation',
+]
+
+# Options for finding VK users
+SEARCH_USERS_PARAMS = {
+    'offset': 0,
+    'count': 1000,
+    'city': None,
+    'sex': None,
+    'age_from': None,
+    'age_to': None,
+    'has_photo': 1,
+    'status': None,
+}
+
+# Fields that must be present when searching for VK users
+SEARCH_USERS_FIELDS = [
+    'is_friend',
+    'is_closed',
+    'blacklisted',
+    'blacklisted_by_me',
+    'can_write_private_message',
+    'bdate',
+    'verified',
+]
+
+# Parameters for receiving photos of a VK user
+GET_PHOTOS_PARAMS = {
+    'count': 3,
+    'skip_hidden': 1
+}
+
+# vkbottle API
+api = API(USER_TOKEN)
+
+# vkbottle Labeler
+base_labeler = BotLabeler()
+
+# vkbottle StateDispenser
+state_dispenser = BuiltinStateDispenser()
