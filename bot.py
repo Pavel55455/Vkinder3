@@ -1,5 +1,5 @@
-из  vkinder выполняетсявкиндер  импорт выполнить
+from vkinder import run
 
 
-'__main__' == __name__ если:
-    выполнить()
+if __name__ == '__main__':
+    run()
