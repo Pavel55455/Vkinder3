@@ -71,4 +71,5 @@ class User:
         if len(empty_info_list) > 0:
             message_user_info = f"Для корректной работы поиска необходимо заполнить следующие поля в вашем профиле:\n {', '.join(empty_info_string_list)}.\n"
         else:
-            message_user_info = f"Информация вашего профиля:\nВозраст
+            message_user_info = f"Информация вашего профиля:\nВозраст: {self.age}\nпол: {dictionaries_vk.sex_dict[self.sex]}\nгород: {self.city['title']}\nсемейное положение: {dictionaries_vk.relations_dict[self.sex][self.relation]}."
+        return message_user_info, empty_info_list
